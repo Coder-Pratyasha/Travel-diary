@@ -16,7 +16,7 @@ import mongoose from "mongoose"
     },
  },
 {
-    timestaps: true
+    timestamps: true
 })
 
 const User = mongoose.model("User", userSchema)
