@@ -24,7 +24,7 @@ const app=express()
 
 //enable cors 
 app.use(cors({
-    origin:"http://localhost:5174",
+    origin:"http://localhost:5173",
     methods:["GET","PUT","POST","DELETE"],
     credentials: true, //allow cookie and authorization error
 }))
