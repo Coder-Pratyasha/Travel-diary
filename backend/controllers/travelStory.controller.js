@@ -146,19 +146,24 @@ export const deleteTravelStory =async(req,res,next) =>{
     //delete travel story from database
     await travelStory.deleteOne({_id: id, userId: userId })
 
+    //chec if a image is not placeholder before deleting
+    const placeholderImageUrl= `http://localhost:3000/assets/placeholderimg.png`
+
     //extract the filename from the imageurl
 
     const imageUrl =travelStory.imageUrl
-    const filename=path.basename(imageUrl)
 
-    //delete filepath
-    const filePath=path.join(rootDir, "uploads", filename)
+    if(imageUrl && imageUrl!==placeholderImageUrl)
+    {
+        const filename=path.basename(imageUrl)
+        const filePath=path.join(rootDir, "uploads", filename)
 
-    //check if the filepath exists
-    if(!fs.existsSync(filePath)){
-        return next(errorHandler(404,"Image not found"))
+        if(file.existsSync(filePath)){
+            await fs.promises.unlink(filePath)
+        }
     }
-    await fs.promises.unlink(filePath)
+        
+       
 
     res.status(200).json({message : "Travel story deleted successfully! "})
     }catch(error){
