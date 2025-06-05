@@ -5,6 +5,11 @@ import { MdDelete } from "react-icons/md"
 import DateSelector from "./DateSelector"
 import ImageSelector from './ImageSelector'
 import TagInput from './TagInput'
+import axiosInstance from '../utils/axiosInstance'
+import moment from 'moment'
+import { toast } from 'react-toastify'
+
+import uploadImage from '../utils/uploadImage'
 
 const AddEditTravelStory = ({storyInfo, type, onClose, getAllTravelStories}) => {
 const [visitedDate,setVisitedDate]=useState(null)
@@ -12,7 +17,51 @@ const [title,setTitle]=useState("")
 const[storyImg,setStoryImg]=useState(null)
 const [story,setStory]=useState("")
 const[visitedLocation,setVisitedLocation]=useState([])
-const handleAddOrUpdatClick=()=>{}
+const [error,setError]=useState("")
+const addNewTravelStory=async()=>{
+    try{
+        let imageUrl=""
+        if(storyImg){
+            const imgUploadRes=await uploadImage(storyImg)
+            imageUrl=imgUploadRes.imageUrl || ""
+        }
+        const response=await axiosInstance.post("/travel-story/add",{
+            title,
+            story,
+            imageUrl: imageUrl ||"",
+            visitedLocation,
+            visitedDate: visitedDate?moment(visitedDate).valueOf():moment.valueOf(),
+        })
+        if(response.data && response.data.story){
+            toast.success("Story added successfully")
+            getAllTravelStories()
+            onClose()
+        }
+    }
+    catch(error){
+        console.log(error)
+    }
+}
+const updateTravelStory=async()=>{
+
+}
+const handleAddOrUpdatClick=()=>{
+    if(!title){
+        setError("Please enter a title")
+        return
+    }
+    if(!story){
+        setError("Please enter a story")
+        return
+    }
+    setError("")
+    if(type==="edit"){
+        updateTravelStory()
+    }
+    else{
+        addNewTravelStory()
+    }
+}
 const handleDeleteStoryImage=()=>{}
   return (
     <div>
@@ -39,6 +88,9 @@ const handleDeleteStoryImage=()=>{}
             <IoIosClose className="text-xl text-slate-400" />
            </button>
         </div>
+        {error && (
+            <p className="text-red-500 text-xs pt-2 text-right">{error}</p>
+        )}
       </div>
      </div>
      <div>
