@@ -64,7 +64,7 @@ const handleAddOrUpdatClick=()=>{
 }
 const handleDeleteStoryImage=()=>{}
   return (
-    <div>
+    <div className="relative">
     <div className="flex items-center justify-between">
         <h5 className="text-xl font-medium text-slate-700">
             {type === "add" ? "Add story" : "Update story"}
@@ -79,12 +79,12 @@ const handleDeleteStoryImage=()=>{}
             <button className="btn-small" onClick={handleAddOrUpdatClick}>
                 <GrUpdate className="text-lg"/>UPDATE STORY
             </button>
-            <button className="btn-small btn-delete">
+            <button className="btn-small btn-delete ">
                 <MdDelete className="text-lg"/>DELETE STORY
             </button>
             </>
            )}
-           <button className="" onClick={onClose}>
+           <button className="cursor-pointer  hover:border hover:border-slate-500 hover:rounded-lg" onClick={onClose}>
             <IoIosClose className="text-xl text-slate-400" />
            </button>
         </div>
