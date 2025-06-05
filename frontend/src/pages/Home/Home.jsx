@@ -4,10 +4,19 @@ import axiosInstance from '../../utils/axiosInstance'
 import TravelStoryCard from "../../components/TravelStoryCard"
 import { data } from 'react-router-dom'
 import { ToastContainer, toast } from "react-toastify"
+import { IoIosAdd } from "react-icons/io"
+import Modal from "react-modal"
+import AddEditTravelStory from '../../components/AddEditTravelStory'
 
 const Home = () => {
   const [allStories,setAllStories]=useState([])
-  console.log(allStories)
+  
+  const [openAddEditModal,setOpenAddEditModal]=useState({
+    isShown: false,
+    type: "add",
+    data: null,
+  })
+
   const getAllTravelStories=async()=>{
     try{
       const response=await axiosInstance.get("/travel-story/get-all")
@@ -77,6 +86,34 @@ const updateIsFavourite=async (storyData)=>{
             <div className="w-[320px]"></div>
          </div>
       </div>
+
+      <Modal 
+      isOpen={openAddEditModal.isShown}
+      onRequestClose={()=>{}}
+      style={{
+        overlay:{
+          backgroundColor: "rgba(0,0,0,0.2)",
+          zIndex:999,
+        },
+      }}
+      appElement={document.getElementById("root")}
+      className="w-[80px] md:w-[40%] h-[80vh] bg-white rounded-lg mx-auto mt-14 p-5 overflow-y-scroll scrollbar z-50"
+      >
+        <AddEditTravelStory 
+        storyInfo={openAddEditModal.data}
+        type={openAddEditModal.type}
+        onClose={()=>{
+          setOpenAddEditModal({isShown:false, type: "add", data: "null" })
+        }}
+        getAllTravelStories={getAllTravelStories} />
+      </Modal>
+
+      <button className="w-10 h-10 flex items-center justify-center rounded-full bg-cyan-400 hover:bg-cyan-600 transform hover:scale-125 transition-transform  fixed right-10 bottom-10" 
+      onClick={()=>{
+        setOpenAddEditModal({isShown: true, type: "add", data:null })
+      }}>
+        <IoIosAdd className="text-[32px] text-white"/>
+      </button>
       <ToastContainer />
     </>
   )
