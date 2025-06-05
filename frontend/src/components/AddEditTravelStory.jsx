@@ -12,11 +12,11 @@ import { toast } from 'react-toastify'
 import uploadImage from '../utils/uploadImage'
 
 const AddEditTravelStory = ({storyInfo, type, onClose, getAllTravelStories}) => {
-const [visitedDate,setVisitedDate]=useState(null)
-const [title,setTitle]=useState("")
-const[storyImg,setStoryImg]=useState(null)
-const [story,setStory]=useState("")
-const[visitedLocation,setVisitedLocation]=useState([])
+const [visitedDate,setVisitedDate]=useState(storyInfo?.visitedDate || null)
+const [title,setTitle]=useState(storyInfo?.title || "")
+const[storyImg,setStoryImg]=useState(storyInfo?.imageUrl || null)
+const [story,setStory]=useState(storyInfo?.story || "")
+const[visitedLocation,setVisitedLocation]=useState(storyInfo?.visitedLocation || [])
 const [error,setError]=useState("")
 const addNewTravelStory=async()=>{
     try{
@@ -43,7 +43,42 @@ const addNewTravelStory=async()=>{
     }
 }
 const updateTravelStory=async()=>{
+    const storyId=storyInfo._id
+    try{
+        let imageUrl=""
+        const postData={
+            title:title,
+            story:story,
+            imageUrl:storyInfo.imageUrl || "",
+            visitedLocation:visitedLocation,
+            visitedDate:visitedDate ? moment(visitedDate).valueOf() : moment().valueOf(),
+        }
+        if(typeof storyImg === "object"){
+            const imageUploadResponse =await uploadImage(storyImg)
+            imageUrl=imageUploadResponse.imageUrl || ""
+            postData={
+                ...postData,
+                imageUrl: imageUrl,
 
+            }
+        }
+        const response= await axiosInstance.post("/travel-story/edit-story/"+storyId,postData)
+        if(response.data && response.data.story)
+        {
+            toast.success("Story updated successfully!")
+            getAllTravelStories()
+
+            onClose()
+        }
+    }catch(error)
+    {
+        if(error.response && error.response.data && error.response.data.message){
+            setError(error.response.data.message)
+        }
+        else{
+            setError("Something went wrong! Please try again!")
+        }
+    }
 }
 const handleAddOrUpdatClick=()=>{
     if(!title){
