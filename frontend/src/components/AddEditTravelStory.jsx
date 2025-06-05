@@ -46,7 +46,7 @@ const updateTravelStory=async()=>{
     const storyId=storyInfo._id
     try{
         let imageUrl=""
-        const postData={
+        let postData={
             title:title,
             story:story,
             imageUrl:storyInfo.imageUrl || "",
@@ -56,6 +56,7 @@ const updateTravelStory=async()=>{
         if(typeof storyImg === "object"){
             const imageUploadResponse =await uploadImage(storyImg)
             imageUrl=imageUploadResponse.imageUrl || ""
+
             postData={
                 ...postData,
                 imageUrl: imageUrl,
@@ -97,7 +98,28 @@ const handleAddOrUpdatClick=()=>{
         addNewTravelStory()
     }
 }
-const handleDeleteStoryImage=()=>{}
+const handleDeleteStoryImage=async ()=>{
+    const deleteImageResponse = await axiosInstance.delete("/travel-story/delete-image", {
+        params: {
+            imageUrl: storyInfo.imageUrl,
+        }
+    })
+    if(deleteImageResponse.data){
+        const storyId=storyInfo._id
+        const postData={
+            title,story,visitedLocation,
+            visitedDate:moment().valueOf(),
+            imageUrl:"",
+        }
+        const response=await axiosInstance.post("/travel-story/edit-story/"+storyId, postData)
+        if(response.data){
+            toast.success("Story image deleted successfully!")
+            setStoryImg(null)
+            getAllTravelStories()
+        }
+        
+    }
+}
   return (
     <div className="relative">
     <div className="flex items-center justify-between">
