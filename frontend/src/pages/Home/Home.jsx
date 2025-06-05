@@ -8,9 +8,14 @@ import { IoIosAdd } from "react-icons/io"
 import Modal from "react-modal"
 import AddEditTravelStory from '../../components/AddEditTravelStory'
 import ViewTravelStory from './ViewTravelStory'
+import EmptyCard from '../../components/EmptyCard'
 
 const Home = () => {
   const [allStories,setAllStories]=useState([])
+
+  const [searchQuery,setSearchQuery]=useState("")
+
+  const [filterType,setFilterType]=useState("")
   
   const [openAddEditModal,setOpenAddEditModal]=useState({
     isShown: false,
@@ -81,13 +86,36 @@ const updateIsFavourite=async (storyData)=>{
     }
   }
 
+  const onSearchStory=async(query)=>{
+    try{
+      const response=await axiosInstance.get("/travel-story/search",{
+        params:{
+          query:query,
+
+        },
+      })
+      if(response.data && response.data.stories)
+      {
+        setFilterType("search")
+        setAllStories(response.data.stories)
+      }
+    }catch(error)
+    {
+      console.log("Something went wrong! Please try again!")
+    }
+  }
+
+  const handleClearSearch=()=>{
+    setFilterType("")
+    getAllTravelStories()
+  }
   useEffect(()=>{
     getAllTravelStories()
     return ()=>{}
   },[])
   return (
     <>
-      <Navbar />
+      <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} onSearchNote={onSearchStory} handleClearSearch={handleClearSearch} />
       <div className="container mx-auto py-10">
          <div className="flex gap-7">
           <div className="flex-1">
@@ -109,7 +137,14 @@ const updateIsFavourite=async (storyData)=>{
                 })}
               </div>
             ):(
-              <div>Empty</div>
+              <EmptyCard imgSrc={"https://images.pexels.com/photos/8490066/pexels-photo-8490066.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"} 
+              message={"Store your travel memories here!"}
+              setOpenAddEditModal={()=>setOpenAddEditModal({
+                isShown: true,
+                type: "add",
+                data: null,
+              })}
+              />
             )}
           </div>
             <div className="w-[320px]"></div>
