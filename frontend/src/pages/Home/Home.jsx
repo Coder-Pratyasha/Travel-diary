@@ -9,6 +9,9 @@ import Modal from "react-modal"
 import AddEditTravelStory from '../../components/AddEditTravelStory'
 import ViewTravelStory from './ViewTravelStory'
 import EmptyCard from '../../components/EmptyCard'
+import { DayPicker } from 'react-day-picker'
+import moment from 'moment'
+import FilterInfoTitle from '../../components/FilterInfoTitle'
 
 const Home = () => {
   const [allStories,setAllStories]=useState([])
@@ -16,6 +19,8 @@ const Home = () => {
   const [searchQuery,setSearchQuery]=useState("")
 
   const [filterType,setFilterType]=useState("")
+
+  const [dateRange,setDateRange]=useState({from:null,to:null})
   
   const [openAddEditModal,setOpenAddEditModal]=useState({
     isShown: false,
@@ -109,6 +114,39 @@ const updateIsFavourite=async (storyData)=>{
     setFilterType("")
     getAllTravelStories()
   }
+
+  const filterStoriesByDate=async(day)=>{
+    try{
+      const startDate=day.from? moment(day.from).valueOf():null
+      const endDate=day.to? moment(day.to).valueOf():null
+      if(startDate && endDate){
+        const response=await axiosInstance.get("/travel-story/filter", {
+          params: {startDate,endDate},
+        },
+      )
+        if(response.data && response.data.stories)
+        {
+          setFilterType("date")
+          setAllStories(response.data.stories)
+        }
+      }
+    }catch(error)
+    {
+      console.log("Something went wrong! Please try again.")
+    }
+  }
+
+  const handleDayClick=(day)=>{
+    setDateRange(day)
+    filterStoriesByDate(day)
+  }
+
+  const resetFilter=()=>{
+    setDateRange({from: null,to:null})
+    setFilterType("")
+    getAllTravelStories()
+  }
+
   useEffect(()=>{
     getAllTravelStories()
     return ()=>{}
@@ -117,6 +155,10 @@ const updateIsFavourite=async (storyData)=>{
     <>
       <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} onSearchNote={onSearchStory} handleClearSearch={handleClearSearch} />
       <div className="container mx-auto py-10">
+        <FilterInfoTitle filterType={filterType} filterDate={dateRange} 
+        onClear={()=>{
+          resetFilter()
+        }} />
          <div className="flex gap-7">
           <div className="flex-1">
             { allStories.length > 0 ? (
@@ -147,7 +189,15 @@ const updateIsFavourite=async (storyData)=>{
               />
             )}
           </div>
-            <div className="w-[320px]"></div>
+            <div className="w-[320px]">
+              <div className="bg-white border border-slate-200 shadow-lg shadow-slate-200/60 rounded-lg">
+              <div className='p-3'>
+                <DayPicker  captionLayout="dropdown" mode="range" selected={dateRange}
+                onSelect={handleDayClick}
+                 pagedNavigation />
+              </div>
+              </div>
+            </div>
          </div>
       </div>
 
