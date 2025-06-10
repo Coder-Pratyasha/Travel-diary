@@ -12,6 +12,7 @@ import EmptyCard from '../../components/EmptyCard'
 import { DayPicker } from 'react-day-picker'
 import moment from 'moment'
 import FilterInfoTitle from '../../components/FilterInfoTitle'
+import { getEmptyCardMessage } from '../../utils/helper'
 
 const Home = () => {
   const [allStories,setAllStories]=useState([])
@@ -180,7 +181,7 @@ const updateIsFavourite=async (storyData)=>{
               </div>
             ):(
               <EmptyCard imgSrc={"https://images.pexels.com/photos/8490066/pexels-photo-8490066.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"} 
-              message={"Store your travel memories here!"}
+              message={getEmptyCardMessage(filterType)}
               setOpenAddEditModal={()=>setOpenAddEditModal({
                 isShown: true,
                 type: "add",

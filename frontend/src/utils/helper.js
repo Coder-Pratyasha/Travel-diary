@@ -14,3 +14,14 @@ export const getInitials=(name)=>{
     }
     return initials.toUpperCase()
 }
+
+export const getEmptyCardMessage=(filterType)=>{
+    switch(filterType){
+        case "search":
+            return `Oops! No memories found!`
+        case "date":
+            return `Oops! No memories found in the given date range`
+        default:
+            return `Lets capture your travel memories, thoughts, experiences and adventures. Start Now!`        
+    }
+}
