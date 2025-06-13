@@ -43,7 +43,7 @@ app.use("/api/auth", authRoutes)
 app.use("/api/user", userRoutes)
 app.use("/api/travel-story", travelStoryRoutes)
 
- //server static files from the uploads and assests directory
+ //server static files from the uploads and assets directory
  const __filename=fileURLToPath(import.meta.url)
 const __dirname=path.dirname(__filename)
 
