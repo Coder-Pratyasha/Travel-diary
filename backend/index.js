@@ -33,10 +33,10 @@ app.use(cookieParser())
 
 app.use(express.json())
 
-app.listen(3000, ()=>
-{
-    console.log("Server running");
-})
+app.get("/", (req, res) => {
+  res.send("Backend is running ");
+});
+
 
 app.use("/api/auth", authRoutes)
 
@@ -60,3 +60,5 @@ app.use((err,req,res,next) => {
         message,
     })
 })
+
+export default app
