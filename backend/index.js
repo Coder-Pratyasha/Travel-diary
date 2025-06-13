@@ -37,6 +37,7 @@ app.get("/", (req, res) => {
   res.send("Backend is running  ");
 });
 
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")))
 
 app.use("/api/auth", authRoutes)
 
