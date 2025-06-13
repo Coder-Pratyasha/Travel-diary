@@ -27,7 +27,7 @@ const travelStorySchema =new mongoose.Schema({
     },
     imageUrl : {
         type: String,
-        required: false,
+        required: true,
     },
     visitedDate: {
         type: Date,
