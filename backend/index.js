@@ -24,7 +24,7 @@ const app=express()
 
 //enable cors 
 app.use(cors({
-    origin:"https://travel-diary-frontend-three.vercel.app",
+    origin:"https://travel-diary-frontend2.vercel.app",
     methods:["GET","PUT","POST","DELETE"],
     credentials: true, //allow cookie and authorization error
 }))
