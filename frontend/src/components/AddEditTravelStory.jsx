@@ -30,7 +30,7 @@ const addNewTravelStory=async()=>{
             story,
             imageUrl: imageUrl ||"",
             visitedLocation,
-            visitedDate: visitedDate?moment(visitedDate).valueOf():moment.valueOf(),
+            visitedDate: visitedDate?moment(visitedDate).valueOf():moment().valueOf(),
         })
         if(response.data && response.data.story){
             toast.success("Story added successfully")

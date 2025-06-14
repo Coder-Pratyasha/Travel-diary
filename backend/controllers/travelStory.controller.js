@@ -3,6 +3,7 @@ import TravelStory from "../models/travelStory.model.js"
 import { errorHandler } from "../utils/error.js"
 import path from "path"
 import fs from "fs"
+import cloudinary from "../cloudinary.js"
 
 export const addTravelStory = async(req,res,next)=>{
     const {title,story,visitedLocation,imageUrl,visitedDate}=req.body
@@ -49,50 +50,61 @@ export const getAllTravelStory =async(req,res,next)=>{
     next(error)}
 }
 
-export const imageUpload = async(req,res,next) => {
-    try{
-        if(!req.file){
-            return next(errorHandler(400, "No image uploaded"))
-        }
-        const imageUrl = `https://travel-diary-1.vercel.app/uploads/${req.file.filename}`
-        res.status(201).json({imageUrl})
-    }catch(error){
-        next(error)
+export const imageUpload = async(req,res,next) =>  {
+  try {
+    if (!req.file) {
+      return next(errorHandler(400, "No image uploaded"));
     }
+
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "travel_stories",
+      },
+      (error, result) => {
+        if (error) return next(errorHandler(500, "Upload failed"));
+        res.status(201).json({ imageUrl: result.secure_url });
+      }
+    );
+
+    stream.end(req.file.buffer);
+  } catch (error) {
+    next(error);
+  }
 }
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname =path.dirname(__filename)
 const rootDir = path.join(__dirname, "..")
 
-export const deleteImage= async(req,res,next) => {
-    
-    const {imageUrl} =req.query
+export const deleteImage = async (req, res, next) => {
+  const { imageUrl } = req.query;
 
-    if(!imageUrl){
-        return next(errorHandler(400, "imageUrl parameter is required"))
-    }
-    try{
-        //extract the filename from the image url
-        const filename=path.basename(imageUrl)
+  if (!imageUrl) {
+    return next(errorHandler(400, "imageUrl parameter is required"));
+  }
 
-        //delete the filepath
-        const filePath=path.join(rootDir, "uploads", filename)
-        //console.log(filePath)
-        if(!fs.existsSync(filePath))
-        {
-            return next(errorHandler(404, "Image not found!"))
-        }
-        
-        //delete
-        await fs.promises.unlink(filePath)
-        res.status(200).json({message: "Image deleted successfully"})
+  try {
+    // Extract Cloudinary public_id
+    const publicIdMatch = imageUrl.match(/travel_stories\/([^/.]+)/);
+    if (!publicIdMatch) {
+      return next(errorHandler(400, "Invalid image URL format"));
     }
-    catch(error)
-    {
-        next(error)
+
+    const publicId = `travel_stories/${publicIdMatch[1]}`;
+
+    // Delete from Cloudinary
+    const result = await cloudinary.uploader.destroy(publicId);
+
+    if (result.result !== "ok") {
+      return next(errorHandler(500, "Failed to delete image from Cloudinary"));
     }
-}
+
+    res.status(200).json({ message: "Image deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 export const editTravelStory = async(req,res,next)=>{
     const {id} = req.params
@@ -153,15 +165,14 @@ export const deleteTravelStory =async(req,res,next) =>{
 
     const imageUrl =travelStory.imageUrl
 
-    if(imageUrl && imageUrl!==placeholderImageUrl)
-    {
-        const filename=path.basename(imageUrl)
-        const filePath=path.join(rootDir, "uploads", filename)
-
-        if(file.existsSync(filePath)){
-            await fs.promises.unlink(filePath)
+        if (imageUrl && imageUrl !== placeholderImageUrl) {
+        const publicIdMatch = imageUrl.match(/travel_stories\/([^/.]+)/);
+        if (publicIdMatch) {
+            const publicId = `travel_stories/${publicIdMatch[1]}`;
+            await cloudinary.uploader.destroy(publicId);
         }
     }
+
         
        
 
