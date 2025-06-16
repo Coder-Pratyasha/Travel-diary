@@ -20,11 +20,13 @@ mongoose.connect(process.env.MONGO_URI).then(
     console.log(err)
 })
 
+const PORT=process.env.PORT || 3000
+
 const app=express()
 
 //enable cors 
 app.use(cors({
-    origin:"https://travel-diary-frontend2.vercel.app",
+    origin:process.env.FRONTEND_URL,
     methods:["GET","PUT","POST","DELETE"],
     credentials: true, //allow cookie and authorization error
 }))
@@ -37,7 +39,9 @@ app.get("/", (req, res) => {
   res.send("Backend is running  ");
 });
 
-
+app.listen(PORT,()=>{
+    console.log("Server is listening");
+})
 
 app.use("/api/auth", authRoutes)
 

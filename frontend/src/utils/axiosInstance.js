@@ -1,7 +1,6 @@
 import axios from "axios"
 
-const BASE_URL = "https://travel-diary-backend2.vercel.app/api"
-
+const BASE_URL = "http://localhost:3000/api"
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
     withCredentials:true,
