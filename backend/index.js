@@ -31,6 +31,8 @@ app.use(cors({
     credentials: true, //allow cookie and authorization error
 }))
 
+
+
 app.use(cookieParser())
 
 app.use(express.json())
