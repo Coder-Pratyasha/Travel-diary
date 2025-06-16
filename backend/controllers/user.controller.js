@@ -14,7 +14,11 @@ export  const getUsers= async(req,res,next)=>
 
 export const signout=async(req,res,next)=>{
     try{
-        res.clearCookie("access_token").status(200).json("Logged out successfully")
+        res.clearCookie("access_token",{
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
+        }).status(200).json("Logged out successfully")
     }
     catch(error)
     {
