@@ -34,7 +34,7 @@ const Navbar = ({searchQuery, setSearchQuery, onSearchNote, handleClearSearch}) 
   }
 
   return (
-    <div className="bg-white flex items-center justify-between px-10 py-2 drop-shadow sticky top-0 z-10">
+    <div className="bg-gradient-to-r from-cyan-200 to-sky-300 shadow flex items-center justify-between px-3 sm:px-10 py-1 sm:py-2 drop-shadow sticky top-0 z-10 text-sm sm:text-base gap-2">
       <Link to={"/"}>
       <h1 className="font-bold text-2xl sm:text-2xl flex flex-wrap">
         <span className="text-blue-400">MILES</span>

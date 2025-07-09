@@ -160,10 +160,10 @@ const updateIsFavourite=async (storyData)=>{
         onClear={()=>{
           resetFilter()
         }} />
-         <div className="flex gap-7">
+         <div className="flex flex-col-reverse md:flex-row gap-7">
           <div className="flex-1">
             { allStories.length > 0 ? (
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 p-2">
                 {allStories.map((item)=>{
                   return (
                   <TravelStoryCard 
@@ -190,7 +190,7 @@ const updateIsFavourite=async (storyData)=>{
               />
             )}
           </div>
-            <div className="w-[320px]">
+            <div className="md:w-[320px] w-full mb-6 md:mb-0 md:p-2">
               <div className="bg-white border border-slate-200 shadow-lg shadow-slate-200/60 rounded-lg">
               <div className='p-3'>
                 <DayPicker  captionLayout="dropdown" mode="range" selected={dateRange}
@@ -212,7 +212,7 @@ const updateIsFavourite=async (storyData)=>{
         },
       }}
       appElement={document.getElementById("root")}
-      className="w-[80px] md:w-[40%] h-[80vh] bg-white rounded-lg mx-auto mt-14 p-5 overflow-y-scroll scrollbar z-50"
+      className="w-full h-full md:w-[40%] md:h-[80vh] bg-white rounded-none md:rounded-lg mx-auto md:mt-14 p-5 overflow-y-scroll scrollbar z-50"
       >
         <AddEditTravelStory 
         storyInfo={openAddEditModal.data}
@@ -232,7 +232,7 @@ const updateIsFavourite=async (storyData)=>{
           },
         }}
         appElement={document.getElementById("root")}
-        className="w-[80px] md:w-[40%] h-[80vh] bg-white rounded-lg mx-auto mt-14 p-5 overflow-y-scroll scrollbar z-50"
+        className="w-full h-full md:w-[40%] md:h-[80vh] bg-white rounded-none md:rounded-lg mx-auto md:mt-14 p-5 overflow-y-scroll scrollbar z-50"
         >
           <ViewTravelStory  
           storyInfo={openViewModal.data || null}
@@ -249,7 +249,7 @@ const updateIsFavourite=async (storyData)=>{
           />
       </Modal>
 
-      <button className="w-10 h-10 flex items-center justify-center rounded-full bg-cyan-400 hover:bg-cyan-600 transform hover:scale-125 transition-transform  fixed right-10 bottom-10" 
+      <button className="w-10 h-10 flex items-center justify-center rounded-full bg-cyan-600 hover:bg-cyan-800 transform hover:scale-125 transition-transform  fixed right-10 bottom-10" 
       onClick={()=>{
         setOpenAddEditModal({isShown: true, type: "add", data:null })
       }}>

@@ -8,6 +8,7 @@ const App = () => {
   return (
    <>
    <HashRouter>
+   <div className="min-h-screen bg-gradient-to-r from-cyan-100 to-sky-200">
    <Routes>
     <Route element={<PrivateRoute/>}>
         <Route path="/" exact element={<Home />} />
@@ -16,6 +17,7 @@ const App = () => {
     <Route path="/login" exact element={<Login />} />
     <Route path="/sign-up" exact element={<Signup />} />
     </Routes>
+    </div>
     </HashRouter>
    </>
   )

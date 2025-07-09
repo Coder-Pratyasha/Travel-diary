@@ -69,12 +69,8 @@ const Signup = () => {
 
   
     <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/2662086/pexels-photo-2662086.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')] bg-cover bg-center rounded-lg" />
-
-   
-    <div className="absolute inset-0 flex items-center justify-between bg-black/40 px-6">
-      
-    
-      <div className="w-3/8 pl-3 text-white">
+    <div className="absolute inset-0 flex flex-col md:flex-row items-center justify-center md:justify-between bg-black/40 px-4 md:px-6 py-6">
+      <div className="hidden md:block w-3/8 pl-3 text-white">
         <h4 className="text-4xl font-bold leading-snug">Create your<br />Stories</h4>
         <p className="text-sm font-medium mt-4 max-w-xs">
           Record your travel experiences and memories in your travel journey
@@ -82,7 +78,7 @@ const Signup = () => {
       </div>
 
    
-      <div className="bg-white/80  w-full max-w-md p-8 rounded-lg shadow-lg z-10">
+      <div className="bg-white/80 w-full max-w-sm p-6 md:p-8 rounded-lg shadow-lg z-10">
             <form onSubmit={handleSubmit}>
               <h4 className="text-2xl font-semibold mb-7">Create Your Account</h4>
 
