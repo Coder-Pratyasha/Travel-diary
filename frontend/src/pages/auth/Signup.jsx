@@ -80,12 +80,9 @@ const Signup = () => {
    
       <div className="bg-white/80 w-full max-w-sm p-6 md:p-8 rounded-lg shadow-lg z-10">
             <form onSubmit={handleSubmit}>
-              <h1 className="font-bold text-2xl sm:text-2xl flex flex-col items-center justify-center">
-              <span className="text-blue-600">MILES AND MEMORIES</span>
               <h4 className="text-xl font-semibold mb-6 text-center md:text-left">
                 Create Your Account
               </h4>
-              </h1>
 
               <input
                 type="text"
